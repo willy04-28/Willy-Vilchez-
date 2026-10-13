@@ -1,0 +1,114 @@
+using System;
+
+class FactorizacionLU
+{
+    static void Main()
+    {
+        Console.WriteLine("======================================");
+        Console.WriteLine("   FACTORIZACIÓN LU DE UNA MATRIZ 3x3");
+        Console.WriteLine("   Método de Doolittle");
+        Console.WriteLine("======================================");
+
+        // Ingreso de los elementos de la matriz A
+        Console.Write("Ingrese a11: ");
+        double a11 = Convert.ToDouble(Console.ReadLine());
+        Console.Write("Ingrese a12: ");
+        double a12 = Convert.ToDouble(Console.ReadLine());
+        Console.Write("Ingrese a13: ");
+        double a13 = Convert.ToDouble(Console.ReadLine());
+
+        Console.Write("Ingrese a21: ");
+        double a21 = Convert.ToDouble(Console.ReadLine());
+        Console.Write("Ingrese a22: ");
+        double a22 = Convert.ToDouble(Console.ReadLine());
+        Console.Write("Ingrese a23: ");
+        double a23 = Convert.ToDouble(Console.ReadLine());
+
+        Console.Write("Ingrese a31: ");
+        double a31 = Convert.ToDouble(Console.ReadLine());
+        Console.Write("Ingrese a32: ");
+        double a32 = Convert.ToDouble(Console.ReadLine());
+        Console.Write("Ingrese a33: ");
+        double a33 = Convert.ToDouble(Console.ReadLine());
+
+        // Matriz A
+        double[,] A = {
+            { a11, a12, a13 },
+            { a21, a22, a23 },
+            { a31, a32, a33 }
+        };
+
+        // Matriz L (identidad)
+        double[,] L = {
+            { 1, 0, 0 },
+            { 0, 1, 0 },
+            { 0, 0, 1 }
+        };
+
+        // Matriz U
+        double[,] U = {
+            { 0, 0, 0 },
+            { 0, 0, 0 },
+            { 0, 0, 0 }
+        };
+
+        // Primera fila de U
+        U[0, 0] = A[0, 0];
+        U[0, 1] = A[0, 1];
+        U[0, 2] = A[0, 2];
+
+        // Primera columna de L
+        if (U[0, 0] == 0)
+        {
+            Console.WriteLine("No se puede realizar la factorización LU sin pivoteo.");
+            return;
+        }
+
+        L[1, 0] = A[1, 0] / U[0, 0];
+        L[2, 0] = A[2, 0] / U[0, 0];
+
+        // Segunda fila de U
+        U[1, 1] = A[1, 1] - L[1, 0] * U[0, 1];
+        U[1, 2] = A[1, 2] - L[1, 0] * U[0, 2];
+
+        // Segunda columna de L
+        if (U[1, 1] == 0)
+        {
+            Console.WriteLine("No se puede realizar la factorización LU sin pivoteo.");
+            return;
+        }
+
+        L[2, 1] = (A[2, 1] - L[2, 0] * U[0, 1]) / U[1, 1];
+
+        // Tercera fila de U
+        U[2, 2] = A[2, 2] - L[2, 0] * U[0, 2] - L[2, 1] * U[1, 2];
+
+        // Mostrar matriz A
+        Console.WriteLine("\nMatriz A:");
+        ImprimirMatriz(A);
+
+        // Mostrar matriz L
+        Console.WriteLine("\nMatriz L:");
+        ImprimirMatriz(L);
+
+        // Mostrar matriz U
+        Console.WriteLine("\nMatriz U:");
+        ImprimirMatriz(U);
+
+        Console.WriteLine("\nFactorización:");
+        Console.WriteLine("A = L × U");
+    }
+
+    static void ImprimirMatriz(double[,] matriz)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Console.Write("[ ");
+            for (int j = 0; j < 3; j++)
+            {
+                Console.Write($"{matriz[i, j],8:F4} ");
+            }
+            Console.WriteLine("]");
+        }
+    }
+}
